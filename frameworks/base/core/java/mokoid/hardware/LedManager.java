@@ -42,6 +42,9 @@ public class LedManager
 	
     private ILedService mLedService;
 
+    /**
+     * @{hide}
+     */
     public LedManager() {
 	// ILedService, IBinder
         mLedService = ILedService.Stub.asInterface(
