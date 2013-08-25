@@ -50,6 +50,14 @@ public class LedTest extends Activity implements View.OnClickListener,
 
         setContentView(btn);
 
+
+        // Singleton 實作
+        // TODO: 使用 Java Singleton Template
+        if (mLedManager == null) {
+            mLedManager = new LedManager();
+            mLedManager.AllOn();
+        }     
+
         //Debug.stopMethodTracing();
     }
 
