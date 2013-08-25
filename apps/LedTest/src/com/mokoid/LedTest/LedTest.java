@@ -89,4 +89,8 @@ public class LedTest extends Activity implements View.OnClickListener,
     public void onLedChanged() {
         Log.i("LedTest", " in LedTest::onLedChanged");
     }
+
+    public void onLedReady() {
+        Log.i("LedTest", " in LedTest::onLedReady");
+    }
 }
