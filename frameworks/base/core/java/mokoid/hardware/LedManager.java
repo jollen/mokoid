@@ -72,6 +72,10 @@ public class LedManager
 	   	public void onLedReady() {
 	   		mContext.onLedReady();
 	   	}
+
+		public void onLedChanged() {
+	   		mContext.onLedChanged();			
+		}
 	}
 	
 	private void doLedReady() {
@@ -86,7 +90,7 @@ public class LedManager
 		 final int size = sLeds.size();
 		 for (int i=0 ; i<size ; i++) {
 			 LedDelegate led = sLeds.get(i);
-			 led.onLedReady();
+			 led.onLedChanged();
 		 }
 	}
 	
