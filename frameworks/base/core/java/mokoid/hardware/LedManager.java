@@ -36,6 +36,10 @@ import mokoid.hardware.ILedService;
 public class LedManager
 {
     private static final String TAG = "LedManager";
+    
+	public static final int MSG_TYPE_LED_SET_ON = 0;
+	public static final int MSG_TYPE_SET_ALL_ON = 1;
+	
     private ILedService mLedService;
 
     public LedManager() {
@@ -50,6 +54,7 @@ public class LedManager
     }
     
 	private Thread mThread = new MyThread();
+	private Thread mAllOnThread = new AllOnThread();	
 	private Handler mHandler = new MyHandler();
 	
 	private class MyHandler extends Handler {
@@ -57,7 +62,15 @@ public class LedManager
 		@Override
 		public void handleMessage(Message msg) {
 			Log.i("LedManager", "IPC is returned.");
-			mContext.onLedChanged();
+			
+			switch (msg.what) {
+			case LedManager.MSG_TYPE_LED_SET_ON:
+				mContext.onLedChanged();
+				break;
+			case LedManager.MSG_TYPE_SET_ALL_ON:
+				mContext.onLedReady();
+			}
+			
 			super.handleMessage(msg);
 		}
 		
@@ -71,6 +84,32 @@ public class LedManager
 					mLedService.setOn(1);
 					
 					Message msg = new Message();
+					
+					msg.what = MSG_TYPE_LED_SET_ON;
+					
+					mHandler.sendMessage(msg);
+					
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}			
+			super.run();
+		}
+    	    	
+    	
+    }
+
+
+    private class AllOnThread extends Thread {
+
+		@Override
+		public void run() {
+	    		try {
+					mLedService.setAllOn();
+					
+					Message msg = new Message();
+					
+					msg.what = MSG_TYPE_SET_ALL_ON;
+					
 					mHandler.sendMessage(msg);
 					
 				} catch (RemoteException e) {
@@ -99,14 +138,8 @@ public class LedManager
     }
     
     public boolean AllOn(int n) {
-        boolean result = false;
-
-        try {
-            result = mLedService.setAllOn();
-        } catch (RemoteException e) {
-            Log.e(TAG, "RemoteException in LedManager.AllOn:", e);
-        }
-        return result;
+		mAllOnThread.start(); // async method call
+		return true;
     }
 
    	private LedEventListener mContext;
