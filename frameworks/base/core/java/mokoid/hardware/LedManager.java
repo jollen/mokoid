@@ -144,6 +144,10 @@ public class LedManager
 
    	private LedEventListener mContext;
 
+   	/**
+   	 * Register a callback object
+   	 * @param context Application
+   	 */
     public void registerListener(LedEventListener context) { // registerListener(this);
     		mContext = context;
     }

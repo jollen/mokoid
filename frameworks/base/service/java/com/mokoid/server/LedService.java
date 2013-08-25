@@ -57,9 +57,10 @@ public final class LedService extends ILedService.Stub {
     }
 
     public boolean setAllOn() {
+		return false;
     }
 
     private static native boolean _init();
-    private static native boolean _set_on(int led, float timeout);
+    private static native boolean _set_on(int led, double d);
     private static native boolean _set_off(int led);
 }
