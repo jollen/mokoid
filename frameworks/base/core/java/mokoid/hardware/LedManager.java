@@ -17,6 +17,8 @@
 
 package mokoid.hardware;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.os.Binder;
 import android.os.Bundle;
@@ -59,6 +61,34 @@ public class LedManager
 	private Thread mThread = new MyThread();
 	private Thread mAllOnThread = new AllOnThread();	
 	private Handler mHandler = new MyHandler();
+
+	private class LedDelegate extends Binder {
+	   	private LedEventListener mContext;
+
+	   	LedDelegate(LedEventListener ctx) {
+	   		mContext = ctx;
+	   	}		
+	   	
+	   	public void onLedReady() {
+	   		mContext.onLedReady();
+	   	}
+	}
+	
+	private void doLedReady() {
+		 final int size = sLeds.size();
+		 for (int i=0 ; i<size ; i++) {
+			 LedDelegate led = sLeds.get(i);
+			 led.onLedReady();
+		 }
+	}
+
+	private void doLedChanged() {
+		 final int size = sLeds.size();
+		 for (int i=0 ; i<size ; i++) {
+			 LedDelegate led = sLeds.get(i);
+			 led.onLedReady();
+		 }
+	}
 	
 	private class MyHandler extends Handler {
 
@@ -68,10 +98,10 @@ public class LedManager
 			
 			switch (msg.what) {
 			case LedManager.MSG_TYPE_LED_SET_ON:
-				mContext.onLedChanged();
+				doLedChanged();
 				break;
 			case LedManager.MSG_TYPE_SET_ALL_ON:
-				mContext.onLedReady();
+				doLedReady();
 			}
 			
 			super.handleMessage(msg);
@@ -145,13 +175,15 @@ public class LedManager
 		return true;
     }
 
-   	private LedEventListener mContext;
+    static final ArrayList<LedDelegate> sLeds = 
+    		new ArrayList<LedDelegate>();
 
    	/**
    	 * Register a callback object
    	 * @param context Application
    	 */
     public void registerListener(LedEventListener context) { // registerListener(this);
-    		mContext = context;
+    		LedDelegate l = new LedDelegate(context);
+    		sLeds.add(l);
     }
 }
