@@ -98,7 +98,18 @@ public class LedManager
         return result;
     }
     
-	private LedEventListener mContext;
+    public boolean AllOn(int n) {
+        boolean result = false;
+
+        try {
+            result = mLedService.setAllOn();
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException in LedManager.AllOn:", e);
+        }
+        return result;
+    }
+
+   	private LedEventListener mContext;
 
     public void registerListener(LedEventListener context) { // registerListener(this);
     		mContext = context;
