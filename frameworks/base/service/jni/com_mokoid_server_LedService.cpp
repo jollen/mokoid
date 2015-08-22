@@ -1,4 +1,4 @@
-#define LOG_TAG "MokoidPlatform"
+#define ALOG_TAG "MokoidPlatform"
 #include "utils/Log.h"
 
 #include <stdlib.h>
@@ -16,26 +16,26 @@ mokoid_init(JNIEnv *env, jclass clazz)
 {
     led_module_t* module;
 
-    LOGI("LedService JNI: mokoid_init() is invoked.");
+    ALOGI("LedService JNI: mokoid_init() is invoked.");
 
     if (hw_get_module(LED_HARDWARE_MODULE_ID, (const hw_module_t**)&module) == 0) {
-        LOGI("LedService JNI: LED Stub found.");
+        ALOGI("LedService JNI: LED Stub found.");
         if (led_control_open(&module->common, &sLedDevice) == 0) {
-    	    LOGI("LedService JNI: Got Stub operations.");
+    	    ALOGI("LedService JNI: Got Stub operations.");
             return 0;
         }
     }
 
-    LOGE("LedService JNI: Get Stub operations failed.");
+    ALOGE("LedService JNI: Get Stub operations failed.");
     return -1;
 }
 
 static jboolean mokoid_setOn(JNIEnv* env, jobject thiz, jint led)
 {
-    LOGI("LedService JNI: mokoid_setOn() is invoked.");
+    ALOGI("LedService JNI: mokoid_setOn() is invoked.");
 
     if (sLedDevice == NULL) {
-        LOGI("LedService JNI: sLedDevice was not fetched correctly.");
+        ALOGI("LedService JNI: sLedDevice was not fetched correctly.");
         return -1;
     } else {
         return sLedDevice->set_on(sLedDevice, led);
@@ -47,10 +47,10 @@ static jboolean mokoid_setOn(JNIEnv* env, jobject thiz, jint led)
 static jboolean mokoid_setOff(JNIEnv* env, jobject thiz, jint led, jfloat x,
 				jobject str)
 {
-    LOGI("LedService JNI: mokoid_setOff() is invoked.");
+    ALOGI("LedService JNI: mokoid_setOff() is invoked.");
 
     if (sLedDevice == NULL) {
-        LOGI("LedService JNI: sLedDevice was not fetched correctly.");
+        ALOGI("LedService JNI: sLedDevice was not fetched correctly.");
         return -1;
     } else {
         return sLedDevice->set_off(sLedDevice, led);
@@ -76,7 +76,7 @@ int registerMethods(JNIEnv* env) {
     /* look up the class */
     clazz = env->FindClass(kClassName);
     if (clazz == NULL) {
-        LOGE("Can't find class %s\n", kClassName);
+        ALOGE("Can't find class %s\n", kClassName);
         return -1;
     }
 
@@ -84,7 +84,7 @@ int registerMethods(JNIEnv* env) {
     if (env->RegisterNatives(clazz, gMethods,
             sizeof(gMethods) / sizeof(gMethods[0])) != JNI_OK)
     {
-        LOGE("Failed registering methods for %s\n", kClassName);
+        ALOGE("Failed registering methods for %s\n", kClassName);
         return -1;
     }
 
@@ -97,7 +97,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     jint result = -1;
 
     if (vm->GetEnv((void**) &env, JNI_VERSION_1_4) != JNI_OK) {
-        LOGE("ERROR: GetEnv failed\n");
+        ALOGE("ERROR: GetEnv failed\n");
 	goto bail;
     }
     assert(env != NULL);
