@@ -9,7 +9,8 @@ LOCAL_SRC_FILES:= \
 LOCAL_SHARED_LIBRARIES := \
 	libutils \
 	libcutils \
-	libledservice
+	libledservice \
+	libbinder
 
 LOCAL_C_INCLUDES :=  \
 	device/mokoid/libledservice
