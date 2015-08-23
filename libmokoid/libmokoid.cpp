@@ -1,4 +1,4 @@
-#define LOG_TAG "MokoidPlatform"
+#define ALOG_TAG "MokoidPlatform"
 #include "utils/Log.h"
 
 #include <stdlib.h>
@@ -13,7 +13,7 @@ void say_hello(JNIEnv *env, jclass clazz)
 {
 	int fd;
 
-	LOGI("Mokoid Lab: Hello World!");
+	ALOGI("Mokoid Lab: Hello World!");
 
 	fd = open("/dev/cdata-test", O_RDONLY);
 	close(fd);
@@ -31,7 +31,7 @@ int registerMethods(JNIEnv* env) {
     /* look up the class */
     clazz = env->FindClass(kClassName);
     if (clazz == NULL) {
-        LOGE("Can't find class %s\n", kClassName);
+        ALOGE("Can't find class %s\n", kClassName);
         return -1;
     }
 
@@ -39,7 +39,7 @@ int registerMethods(JNIEnv* env) {
     if (env->RegisterNatives(clazz, gMethods,
             sizeof(gMethods) / sizeof(gMethods[0])) != JNI_OK)
     {
-        LOGE("Failed registering methods for %s\n", kClassName);
+        ALOGE("Failed registering methods for %s\n", kClassName);
         return -1;
     }
 
@@ -52,7 +52,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     jint result = -1;
 
     if (vm->GetEnv((void**) &env, JNI_VERSION_1_4) != JNI_OK) {
-        LOGE("ERROR: GetEnv failed\n");
+        ALOGE("ERROR: GetEnv failed\n");
 	goto bail;
     }
     assert(env != NULL);

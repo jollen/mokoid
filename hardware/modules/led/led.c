@@ -34,13 +34,13 @@ int led_on(struct led_control_device_t *dev, int32_t led)
 {
 	int fd;
 
-	LOGI("LED Stub: set %d on.", led);
+	ALOGI("LED Stub: set %d on.", led);
 
 	fd = dev->fd;
 	ioctl(fd, 0, 0);
 
 	sleep(30);
-	LOGI("LED On: wake up...");
+	ALOGI("LED On: wake up...");
 
 	return 0;
 }
@@ -49,13 +49,13 @@ int led_off(struct led_control_device_t *dev, int32_t led)
 {
 	int fd;
 
-	LOGI("LED Stub: set %d off.", led);
+	ALOGI("LED Stub: set %d off.", led);
 
 	fd = dev->fd;
 	ioctl(fd, 0, 0);
 
 	sleep(30);
-	LOGI("LED Off: wake up...");
+	ALOGI("LED Off: wake up...");
 
 	return 0;
 }

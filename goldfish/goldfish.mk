@@ -8,18 +8,8 @@ PRODUCT_PACKAGES += \
 	LedTest \
 	LedClient
 
-#PRODUCT_COPY_FILES := \
-#    vendor/mokoid/proprietary/LedClient.apk:system/app/LedClient.apk
-
 PRODUCT_COPY_FILES += \
-    vendor/mokoid/goldfish/com.mokoid.server.xml:system/etc/permissions/com.mokoid.server.xml
-
-#PRODUCT_COPY_FILES += \
-#    vendor/mokoid/dma6410xp/led.ko:root/lib/modules/led.ko
-
-PRODUCT_COPY_FILES += \
-    vendor/mokoid/goldfish/cdata.ko:root/lib/modules/cdata.ko
-#    vendor/mokoid/omap3/init.rc:root/init.rc
+    device/mokoid/goldfish/init.rc:root/init.rc
 
 # If we get a real board, put these in.
 #PRODUCT_COPY_FILES += \

@@ -60,7 +60,7 @@ IMPLEMENT_META_INTERFACE(LedService, "mokoid.hardware.ILedService");
 
 #define CHECK_INTERFACE(interface, data, reply) \
         do { if (!data.enforceInterface(interface::getInterfaceDescriptor())) { \
-            LOGW("Call incorrectly routed to " #interface); \
+            ALOGW("Call incorrectly routed to " #interface); \
             return PERMISSION_DENIED; \
         } } while (0)
 
@@ -87,17 +87,17 @@ LedService::LedService()
 {
     led_module_t* module;
 
-    LOGI("ledserver->LedService: trying to get stub object");
+    ALOGI("ledserver->LedService: trying to get stub object");
 
     if (hw_get_module(LED_HARDWARE_MODULE_ID, (const hw_module_t**)&module) == 0) {
-        LOGI("ledserver->LedService: stub found.");
+        ALOGI("ledserver->LedService: stub found.");
         if (led_control_open(&module->common, &sLedDevice) == 0) {
-            LOGI("ledserver->LedService: ops not found.");
+            ALOGI("ledserver->LedService: ops not found.");
             return;
         }
     }
 
-    LOGE("ledserver->LedService: failed to get LED stub");
+    ALOGE("ledserver->LedService: failed to get LED stub");
     return;
 }
 
@@ -112,10 +112,10 @@ void LedService::instantiate() {
 
 int LedService::setOn(int led)
 {
-    LOGI("ledserver->LedService::setOn");
+    ALOGI("ledserver->LedService::setOn");
 
     if (sLedDevice == NULL) {
-        LOGI("ledserver: sLedDevice was not fetched correctly.");
+        ALOGI("ledserver: sLedDevice was not fetched correctly.");
         return -1;
     } else {
         return sLedDevice->set_on(sLedDevice, led);

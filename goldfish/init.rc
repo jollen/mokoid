@@ -3,7 +3,7 @@ on init
 loglevel 3
 
 # setup the global environment
-    export PATH /sbin:/system/sbin:/system/bin:/system/xbin:/system/hanktools
+    export PATH /bin:/sbin:/system/sbin:/system/bin:/system/xbin:/system/hanktools
     export LD_LIBRARY_PATH /system/lib
     export ANDROID_BOOTLOGO 1
     export ANDROID_ROOT /system
