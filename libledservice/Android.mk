@@ -11,7 +11,8 @@ LOCAL_MODULE := libledservice
 LOCAL_SHARED_LIBRARIES += \
 	libutils \
 	libcutils \
-	libhardware
+	libhardware \
+	libbinder
 
 LOCAL_C_INCLUDES += \
 	frameworks/base/include \
