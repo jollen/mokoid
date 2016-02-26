@@ -75,14 +75,15 @@ LedService::LedService()
 
 // Singleton
 void LedService::instantiate() {
-     defaultServiceManager()->addService(
-             String16("led"), new LedService());
+    defaultServiceManager()->addService(
+    String16("led"), new LedService());
 }
 ```
 
 ## Step 6: Declare asInterface() 與其它
 
 * 使用 DECLARE_META_INTERFACE 巨集
+* 提供 Remote binder proxy
 
 ```
 class ILedService: public IInterface
@@ -98,6 +99,7 @@ public:
 ## Step 7: Implement asInterface() 與其它
 
 * 使用 IMPLEMENT_META_INTERFACE 巨集
+* .asInterface() 的 code template
 
 ```
 IMPLEMENT_META_INTERFACE(LedService, "mokoid.hardware.ILedService");
@@ -105,7 +107,72 @@ IMPLEMENT_META_INTERFACE(LedService, "mokoid.hardware.ILedService");
 
 ## Step 8: 使用 BpInterface
 
+* 生成 Binder proxy object
 
+```
+/*
+ * Binder proxy object implementation
+ */
+class BpLedService: public BpInterface<ILedService>
+{
+public:
+    BpLedService(const sp<IBinder>& impl)
+        : BpInterface<ILedService>(impl)
+    {
+    }
+
+    virtual int setOn(int led)
+    {
+    }
+
+};
+```
+
+## Step 9: 實作 Binder proxy
+
+* Binder IPC 實作
+* 呼叫 transact()
+
+```
+class BpLedService: public BpInterface<ILedService>
+{
+public:
+    BpLedService(const sp<IBinder>& impl)
+        : BpInterface<ILedService>(impl)
+    {
+    }
+
+    virtual int setOn(int led)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(ILedService::getInterfaceDescriptor());
+        remote()->transact(BnLedService::LED_ON, data, &reply);
+        return 0;
+    }
+
+};
+```
+
+## Final Step: 實作 onTransact()
+
+* Native Service (Server) 的 onTransact() 實作
+
+```
+status_t BnLedService::onTransact(
+    uint32_t code, const Parcel& data, Parcel* reply, uint32_t flags)
+{
+    switch(code) {
+        case CONNECT: {
+            CHECK_INTERFACE(ILedService, data, reply);
+            return NO_ERROR;
+        } break;
+    case LED_ON:
+        return NO_ERROR;
+        default:
+            return BBinder::onTransact(code, data, reply, flags);
+    }
+}
+```
 
 
 
