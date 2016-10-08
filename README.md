@@ -1,6 +1,8 @@
-# 培訓內谷
+這是我在[Android HAL & Framework： 軟硬整合實作訓練](https://www.moko365.com/enterprise/af101-android-hal-framework-practical)培訓課程使用的練習範例。
 
-1. 實作 Android Native Service
+# 上機練習
+
+1. [如何從零開始實作一個 Android Native Service](#實作 Android Native Service)
 
 ## 實作 Android Native Service
 
