@@ -1,5 +1,15 @@
 這是我在[Android HAL & Framework： 軟硬整合實作訓練](https://www.moko365.com/enterprise/af101-android-hal-framework-practical)培訓課程使用的練習範例。
 
+# 入門指南
+
+* [Android 的 HAL 技術, #1: 簡介與發展現況](http://www.jollen.org/blog/2009/10/android-hal-status-report.html)
+* [Android 的 HAL 技術, #2: 採用Service架構方式](http://www.jollen.org/blog/2009/10/android-hal-service-introduction.html)
+* [Android 的 HAL 技術, #3: 小探Android Service與Native Service](http://www.jollen.org/blog/2009/11/android-hal-android-native-service.html)
+* [Android 的 HAL 技術, #4: Android Service 與 HAL Stub](http://www.jollen.org/blog/2009/11/android-hal-android-service-hal.html)
+* [Android 的 HAL 技術, #5: 繼承 HAL 的 struct hw_module_t](http://www.jollen.org/blog/2009/12/android-hal-derived-c-language.html)
+* [Android 的 HAL 技術, #7: 取得 Proxy Object](http://www.jollen.org/blog/2009/12/android-hal-get-proxy-object.html)
+* [Android 的 HAL 技術, #8: 實作 HAL Stub](http://www.jollen.org/blog/2010/01/android-hal-stub-design-implement.html)
+
 # 上機練習
 
 1. [如何從零開始實作一個 Android Native Service](#實作 Android Native Service)
