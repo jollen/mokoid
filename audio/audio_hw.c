@@ -24,17 +24,24 @@
 #include <audio_utils/resampler.h>
 #include <audio_route/audio_route.h>
 
-int adev_open_output_stream(struct audio_hw_device *dev,
-                          audio_io_handle_t handle,
-                          audio_devices_t devices,
-                          audio_output_flags_t flags,
-                          struct audio_config *config,
-                          struct audio_stream_out **stream_out)
+struct audio_device {
+    struct audio_hw_device hw_device;
+};
+
+static int adev_open_output_stream(struct audio_hw_device *dev,
+                                   audio_io_handle_t handle,
+                                   audio_devices_t devices,
+                                   audio_output_flags_t flags,
+                                   struct audio_config *config,
+                                   struct audio_stream_out **stream_out,
+                                   const char *address __unused)
 {
 	ALOGI(LOG_TAG, "audio_config::offload_info::sample_rate = %d\n", config->offload_info.sample_rate);
 	ALOGI(LOG_TAG, "audio_config::offload_info::format = %d\n", config->offload_info.format);	
 	ALOGI(LOG_TAG, "audio_config::offload_info::bit_rate = %d\n", config->offload_info.bit_rate);
 	ALOGI(LOG_TAG, "audio_config::offload_info::duration_us = %d\n", config->offload_info.duration_us);
+
+	return 0;
 }
 
 static int adev_open(const hw_module_t* module, const char* name,
