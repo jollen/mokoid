@@ -56,6 +56,10 @@ public final class LedService extends ILedService.Stub {
 	return _set_off(led);
     }
 
+    public boolean setName(String name) {
+	return true;
+    }
+
     public boolean setAllOn() {
 		return false;
     }

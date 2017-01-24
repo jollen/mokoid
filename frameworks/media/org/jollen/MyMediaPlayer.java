@@ -1,6 +1,7 @@
 package org.jollen;
 
 import android.media.*;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.content.Context;
 import android.util.Log;
 import android.content.res.AssetFileDescriptor;
@@ -9,6 +10,7 @@ import java.io.IOException;
 public final class MyMediaPlayer extends MediaPlayer {
     private static final String TAG = "MyMediaPlayer";
     private static MyMediaPlayer mp;
+    private static Context app;
 
     public MyMediaPlayer() {
         super();   
@@ -16,6 +18,8 @@ public final class MyMediaPlayer extends MediaPlayer {
 
     public static MyMediaPlayer create(Context context, int resid) {
         int s = AudioSystem.newAudioSessionId();
+
+	app =context;
 
         if (mp != null) {
 	    return mp;
@@ -39,7 +43,7 @@ public final class MyMediaPlayer extends MediaPlayer {
 
             mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             afd.close();
-            mp.prepare();
+            mp.prepareAsync();
             return mp;
         } catch (IOException ex) {
             Log.d(TAG, "create failed:", ex);
@@ -53,5 +57,11 @@ public final class MyMediaPlayer extends MediaPlayer {
         }
         return null;
     }
-}
 
+    @Override
+    public void start() throws IllegalStateException {
+	Log.i(TAG, "start playback...");
+        super.start();
+    }
+
+}

@@ -59,6 +59,20 @@ static jboolean mokoid_setOff(JNIEnv* env, jobject thiz, jint led, jfloat x,
     return 0;
 }
 
+static jboolean mokoid_setName(JNIEnv* env, jobject thiz, jstring ns)
+{
+    // const jchar *name = env->GetStringChars(ns, NULL);   
+    const char *name = env->GetStringUTFChars(ns, NULL);
+
+    if (sLedDevice == NULL) {
+        ALOGI("LedService JNI: sLedDevice was not fetched correctly.");
+        return -1;
+    } else {
+        ALOGI("LedService JNI: device name = %s", name);
+        return sLedDevice->set_name(sLedDevice, const_cast<char *>(name)); 
+    }
+}
+
 static const JNINativeMethod gMethods[] = {
     {"_init",	  	"()Z",
 			(void*)mokoid_init},
@@ -66,6 +80,8 @@ static const JNINativeMethod gMethods[] = {
                         (void*)mokoid_setOn },
     { "_set_off",          "(I)Z",
                         (void*)mokoid_setOff },
+    { "_set_name",          "(Ljava/lang/String;)Z",
+                        (void*)mokoid_setName }
 };
 
 int registerMethods(JNIEnv* env) {
