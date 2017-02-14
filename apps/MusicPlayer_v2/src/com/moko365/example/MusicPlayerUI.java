@@ -18,17 +18,17 @@ package com.moko365.example;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Debug;
 import android.widget.Button;
 import android.view.View;
 import android.view.View.OnClickListener;
 import java.lang.Runnable;
+import org.jollen.MyMediaPlayer;
 
 public class MusicPlayerUI extends Activity implements OnClickListener {
     /** Called when the activity is first created. */
-	MediaPlayer mMediaPlayer;
+	MyMediaPlayer mMediaPlayer;
 	Thread mThread;
 	Context mContext;
 	
@@ -41,12 +41,7 @@ public class MusicPlayerUI extends Activity implements OnClickListener {
         playBtn.setOnClickListener(this);
         
         mContext = this;
-        
-        mThread = new Thread(new Runnable() {
-            public void run() {
-            	mMediaPlayer = MediaPlayer.create(mContext, R.raw.test);		
-            }
-        });
+        mMediaPlayer = MyMediaPlayer.create(mContext, R.raw.test);
     }
 
 	public void onClick(View v) {
