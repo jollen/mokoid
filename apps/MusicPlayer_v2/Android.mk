@@ -20,7 +20,7 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
-LOCAL_MODULE_TAGS := eng
+LOCAL_MODULE_TAGS := optional
 
 # This is the target being built.
 LOCAL_PACKAGE_NAME := MusicPlayer_v2
@@ -32,6 +32,8 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src)
 LOCAL_SDK_VERSION := current
 
 # Also link against our own custom library.
-LOCAL_JAVA_LIBRARIES := 
+#LOCAL_JAVA_LIBRARIES :=  mymedia
+
+LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
 include $(BUILD_PACKAGE)

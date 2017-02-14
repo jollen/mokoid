@@ -3,12 +3,17 @@
       package="com.moko365.example"
       android:versionCode="1"
       android:versionName="1.0">
+
+    <original-package android:name="com.moko365.example" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="9"/>
+
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".MusicPlayerUI"
+        <activity android:name="com.moko365.example.MusicPlayerUI"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
