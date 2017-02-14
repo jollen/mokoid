@@ -41,6 +41,17 @@ static int adev_open_output_stream(struct audio_hw_device *dev,
 	ALOGI(LOG_TAG, "audio_config::offload_info::bit_rate = %d\n", config->offload_info.bit_rate);
 	ALOGI(LOG_TAG, "audio_config::offload_info::duration_us = %d\n", config->offload_info.duration_us);
 
+        if ((err = snd_pcm_set_params(handle,
+                                      SND_PCM_FORMAT_U8,
+                                      SND_PCM_ACCESS_RW_INTERLEAVED,
+                                      1,
+                                      config->offload_info.bit_rate,
+                                      1,
+                                      500000)) < 0) {   /* 0.5sec */
+                printf("Playback open error: %s\n", snd_strerror(err));
+                exit(EXIT_FAILURE);
+        }
+
 	return 0;
 }
 
