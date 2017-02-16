@@ -33,6 +33,7 @@
 #include "TestPlayerStub.h"
 #include "StagefrightPlayer.h"
 #include "nuplayer/NuPlayerDriver.h"
+#include "FFmpegPlayer.h"
 
 namespace android {
 
@@ -366,6 +367,24 @@ class TestPlayerFactory : public MediaPlayerFactory::IFactory {
     }
 };
 
+class FFmpegFactory : public MediaPlayerFactory::IFactory {
+  public:                                                     
+    virtual float scoreFactory(const sp<IMediaPlayer>& /*client*/,
+                               const char* url,               
+                               float /*curScore*/) {          
+        if (TestPlayerStub::canBeUsed(url)) {                 
+            return 1.0;                                       
+        }                                                     
+                                                              
+        return 0.0;                                           
+    }                                                         
+                                                              
+    virtual sp<MediaPlayerBase> createPlayer() {              
+        ALOGV("Create FFmpeg Player");                     
+        return new FFmpegPlayer();                          
+    }                                                         
+}; 
+
 void MediaPlayerFactory::registerBuiltinFactories() {
     Mutex::Autolock lock_(&sLock);
 
@@ -376,6 +395,7 @@ void MediaPlayerFactory::registerBuiltinFactories() {
     registerFactory_l(new NuPlayerFactory(), NU_PLAYER);
     registerFactory_l(new SonivoxPlayerFactory(), SONIVOX_PLAYER);
     registerFactory_l(new TestPlayerFactory(), TEST_PLAYER);
+    registerFactory_l(new FFmpegFactory(), FFMPEG_PLAYER);
 
     sInitComplete = true;
 }
