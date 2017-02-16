@@ -25,14 +25,13 @@
 #include <media/stagefright/foundation/ADebug.h>
 #include <utils/Errors.h>
 #include <utils/misc.h>
-#include <../libstagefright/include/WVMExtractor.h>
+#include <libstagefright/include/WVMExtractor.h>
 
 #include "MediaPlayerFactory.h"
 
 #include "MidiFile.h"
 #include "TestPlayerStub.h"
 #include "StagefrightPlayer.h"
-#include "nuplayer/NuPlayerDriver.h"
 #include "FFmpegPlayer.h"
 
 namespace android {
@@ -234,52 +233,6 @@ class StagefrightPlayerFactory :
     }
 };
 
-class NuPlayerFactory : public MediaPlayerFactory::IFactory {
-  public:
-    virtual float scoreFactory(const sp<IMediaPlayer>& /*client*/,
-                               const char* url,
-                               float curScore) {
-        static const float kOurScore = 0.8;
-
-        if (kOurScore <= curScore)
-            return 0.0;
-
-        if (!strncasecmp("http://", url, 7)
-                || !strncasecmp("https://", url, 8)
-                || !strncasecmp("file://", url, 7)) {
-            size_t len = strlen(url);
-            if (len >= 5 && !strcasecmp(".m3u8", &url[len - 5])) {
-                return kOurScore;
-            }
-
-            if (strstr(url,"m3u8")) {
-                return kOurScore;
-            }
-
-            if ((len >= 4 && !strcasecmp(".sdp", &url[len - 4])) || strstr(url, ".sdp?")) {
-                return kOurScore;
-            }
-        }
-
-        if (!strncasecmp("rtsp://", url, 7)) {
-            return kOurScore;
-        }
-
-        return 0.0;
-    }
-
-    virtual float scoreFactory(const sp<IMediaPlayer>& /*client*/,
-                               const sp<IStreamSource>& /*source*/,
-                               float /*curScore*/) {
-        return 1.0;
-    }
-
-    virtual sp<MediaPlayerBase> createPlayer() {
-        ALOGV(" create NuPlayer");
-        return new NuPlayerDriver;
-    }
-};
-
 class SonivoxPlayerFactory : public MediaPlayerFactory::IFactory {
   public:
     virtual float scoreFactory(const sp<IMediaPlayer>& /*client*/,
@@ -372,8 +325,8 @@ class FFmpegFactory : public MediaPlayerFactory::IFactory {
     virtual float scoreFactory(const sp<IMediaPlayer>& /*client*/,
                                const char* url,               
                                float /*curScore*/) {          
-        if (TestPlayerStub::canBeUsed(url)) {                 
-            return 1.0;                                       
+        if (!strncasecmp("http://", url, 7)) {
+            return 1.2;                                   
         }                                                     
                                                               
         return 0.0;                                           
@@ -392,7 +345,6 @@ void MediaPlayerFactory::registerBuiltinFactories() {
         return;
 
     registerFactory_l(new StagefrightPlayerFactory(), STAGEFRIGHT_PLAYER);
-    registerFactory_l(new NuPlayerFactory(), NU_PLAYER);
     registerFactory_l(new SonivoxPlayerFactory(), SONIVOX_PLAYER);
     registerFactory_l(new TestPlayerFactory(), TEST_PLAYER);
     registerFactory_l(new FFmpegFactory(), FFMPEG_PLAYER);
