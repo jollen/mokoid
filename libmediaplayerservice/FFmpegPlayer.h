@@ -18,6 +18,7 @@
 #ifndef ANDROID_FFMPEGPLAYER_H
 #define ANDROID_FFMPEGPLAYER_H
 
+#include <media/AudioTrack.h>
 #include <media/MediaPlayerInterface.h>
 
 namespace android {
@@ -69,6 +70,13 @@ private:
     FFmpegPlayer &operator=(const FFmpegPlayer &);
 
     static void audioCallback(int event, void *cookie, void *info);
+
+    sp<AudioTrack> mTrack;
+    unsigned char b[8];
+    int fds[2];
+    pid_t child;
+    pid_t pid;
+    uid_t uid;
 };
 
 }  // namespace android

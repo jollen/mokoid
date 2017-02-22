@@ -71,11 +71,20 @@ status_t FFmpegPlayer::setVideoSurfaceTexture(
     return OK;
 }
 
-status_t FFmpegPlayer::prepare() {
+status_t FFmpegPlayer::start() {
+    if (mTrack != 0) mTrack->start();
+
+/*                                                            
+ssize_t     write(const void* buffer, size_t size, bool blocking = true);   
+*/                                                            
+    while (read(fds[0], b, 1) > 0) {                          
+        if (mTrack != 0) mTrack->write(b, 1, true);                                 
+    }  
+
     return OK;
 }
 
-status_t FFmpegPlayer::prepareAsync() {
+status_t FFmpegPlayer::prepare() {
     return OK;
 }
 
@@ -83,14 +92,8 @@ void FFmpegPlayer::audioCallback(int event, void *cookie, void *info) {
     ALOGV("audioCallback");
 };
 
-status_t FFmpegPlayer::start() {
+status_t FFmpegPlayer::prepareAsync() {
     ALOGV("start");
-
-    unsigned char b[8];
-    int fds[2];
-
-    pid_t pid;
-    uid_t uid;
 
     sp<AudioTrack> t;
 
@@ -99,7 +102,6 @@ status_t FFmpegPlayer::start() {
 
     pipe(fds);
 
-    pid_t child;
     child = fork();
 
     if (child != 0) {
@@ -152,15 +154,8 @@ AudioTrack::AudioTrack(
         pid, // process ID
         NULL); // audio attributes
 
-    //t->setVolume(mLeftVolume, mRightVolume);
-    t->start();
-
-/*
-ssize_t     write(const void* buffer, size_t size, bool blocking = true);
-*/
-    while (read(fds[0], b, 1) > 0) {
-        t->write(b, 1, true);
-    }
+    mTrack.clear();
+    mTrack = t;
 
     return OK;
 }
