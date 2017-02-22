@@ -67,6 +67,8 @@ public:
 private:
     FFmpegPlayer(const FFmpegPlayer &);
     FFmpegPlayer &operator=(const FFmpegPlayer &);
+
+    static void audioCallback(int event, void *cookie, void *info);
 };
 
 }  // namespace android

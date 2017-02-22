@@ -79,6 +79,10 @@ status_t FFmpegPlayer::prepareAsync() {
     return OK;
 }
 
+void FFmpegPlayer::audioCallback(int event, void *cookie, void *info) {
+    ALOGV("audioCallback");
+};
+
 status_t FFmpegPlayer::start() {
     ALOGV("start");
 
@@ -138,7 +142,7 @@ AudioTrack::AudioTrack(
 	CHANNEL_MASK_USE_CHANNEL_ORDER, // channel mask
 	0, // frame count (0: default)
 	AUDIO_OUTPUT_FLAG_COMPRESS_OFFLOAD, // flags, see <system/audio.h>
-        NULL, // callback                             
+        audioCallback, // callback                             
         NULL, // user data                            
         0, // notification frames                     
         0, // session ID (0: use default)                                   
