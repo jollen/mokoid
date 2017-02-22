@@ -16,11 +16,13 @@
 
 //#define LOG_NDEBUG 0
 #define LOG_TAG "FFmpegPlayer"
+
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/wait.h>
 #include <sys/types.h>
 
 #include <utils/Log.h>
-
 #include <media/AudioTrack.h>
 
 #include "FFmpegPlayer.h"
@@ -80,7 +82,9 @@ status_t FFmpegPlayer::prepareAsync() {
 status_t FFmpegPlayer::start() {
     ALOGV("start");
 
+    unsigned char b[8];
     int fds[2];
+
     pid_t pid;
     uid_t uid;
 
@@ -91,6 +95,24 @@ status_t FFmpegPlayer::start() {
 
     pipe(fds);
 
+    pid_t child;
+    child = fork();
+
+    if (child != 0) {
+        close(fds[0]);
+
+        int fd;
+        fd  = open("/tmp/audio", O_RDONLY);
+
+        while (read(fd, &b, 1) >= 0) {
+            write(fds[1], &b, 1);
+        }
+
+	close(fd);
+	close(fds[1]);
+
+	return waitpid(child, NULL, 0);
+    }
 /*
 AudioTrack::AudioTrack(
         audio_stream_type_t streamType,
@@ -132,7 +154,6 @@ AudioTrack::AudioTrack(
 /*
 ssize_t     write(const void* buffer, size_t size, bool blocking = true);
 */
-    unsigned char b[128];
     while (read(fds[0], b, 1) > 0) {
         t->write(b, 1, true);
     }
