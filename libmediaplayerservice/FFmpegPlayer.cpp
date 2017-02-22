@@ -16,7 +16,12 @@
 
 //#define LOG_NDEBUG 0
 #define LOG_TAG "FFmpegPlayer"
+#include <unistd.h>
+#include <sys/types.h>
+
 #include <utils/Log.h>
+
+#include <media/AudioTrack.h>
 
 #include "FFmpegPlayer.h"
 
@@ -74,6 +79,54 @@ status_t FFmpegPlayer::prepareAsync() {
 
 status_t FFmpegPlayer::start() {
     ALOGV("start");
+
+    pid_t pid;
+    uid_t uid;
+
+    sp<AudioTrack> t;
+
+    pid = getpid();
+    uid = getuid();
+/*
+AudioTrack::AudioTrack(
+        audio_stream_type_t streamType,
+        uint32_t sampleRate,
+        audio_format_t format,
+        audio_channel_mask_t channelMask,
+        size_t frameCount,
+        audio_output_flags_t flags,
+        callback_t cbf,
+        void* user,
+        uint32_t notificationFrames,
+        int sessionId,
+        transfer_type transferType,
+        const audio_offload_info_t *offloadInfo,
+        int uid,
+        pid_t pid,
+        const audio_attributes_t* pAttributes) 
+*/
+    t = new AudioTrack(
+	AUDIO_STREAM_MUSIC, //stream type
+	44100, // sample rate
+	AUDIO_FORMAT_PCM_16_BIT, // format
+	CHANNEL_MASK_USE_CHANNEL_ORDER, // channel mask
+	0, // frame count (0: default)
+	AUDIO_OUTPUT_FLAG_COMPRESS_OFFLOAD, // flags, see <system/audio.h>
+        NULL, // callback                             
+        NULL, // user data                            
+        0, // notification frames                     
+        0, // session ID (0: use default)                                   
+        AudioTrack::TRANSFER_DEFAULT, // transfer type
+        NULL, // offload info    
+        uid, // user ID
+        pid, // process ID
+        NULL); // audio attributes
+
+    //t->setVolume(mLeftVolume, mRightVolume);
+    t->start();
+
+    //t->write();
+
     return OK;
 }
 
