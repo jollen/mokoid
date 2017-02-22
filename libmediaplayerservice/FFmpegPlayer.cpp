@@ -80,6 +80,7 @@ status_t FFmpegPlayer::prepareAsync() {
 status_t FFmpegPlayer::start() {
     ALOGV("start");
 
+    int fds[2];
     pid_t pid;
     uid_t uid;
 
@@ -87,6 +88,9 @@ status_t FFmpegPlayer::start() {
 
     pid = getpid();
     uid = getuid();
+
+    pipe(fds);
+
 /*
 AudioTrack::AudioTrack(
         audio_stream_type_t streamType,
@@ -125,7 +129,13 @@ AudioTrack::AudioTrack(
     //t->setVolume(mLeftVolume, mRightVolume);
     t->start();
 
-    //t->write();
+/*
+ssize_t     write(const void* buffer, size_t size, bool blocking = true);
+*/
+    unsigned char b[128];
+    while (read(fds[0], b, 1) > 0) {
+        t->write(b, 1, true);
+    }
 
     return OK;
 }
