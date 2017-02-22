@@ -72,6 +72,31 @@ status_t FFmpegPlayer::setVideoSurfaceTexture(
 }
 
 status_t FFmpegPlayer::start() {
+    pid_t child;
+
+    const char *arg_list[] = {	
+      "ffmpeg",
+      "-i",
+      "http://static.mokoversity.com/webm/big_buck_bunny.webm",
+      "-vn",
+      "-ar",
+      "44100",
+      "-ac",
+      "2",
+      "-ab",
+      "192k",
+      "-f",
+      "wav",
+      "/tmp/audio",
+      NULL};
+
+    child = fork();
+
+    if (child != 0)
+        return execvp("ffmpeg", const_cast<char **>(arg_list));
+
+    // Child process
+
     if (mTrack != 0) mTrack->start();
 
 /*                                                            
