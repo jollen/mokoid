@@ -163,6 +163,10 @@ public class LedManager
     		return true;
     }
 
+    public boolean setName(String name) {
+    		return true;
+    }
+
     public boolean LedOff(int n) {
         boolean result = false;
 
@@ -177,6 +181,10 @@ public class LedManager
     public boolean AllOn(int n) {
 		mAllOnThread.start(); // async method call
 		return true;
+    }
+
+    public boolean setName(String name) {
+		return mLedService.setDeviceName();
     }
 
     static final ArrayList<LedDelegate> sLeds = 

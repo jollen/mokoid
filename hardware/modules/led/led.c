@@ -60,6 +60,12 @@ int led_off(struct led_control_device_t *dev, int32_t led)
 	return 0;
 }
 
+int set_device_name(struct led_control_device_t *dev, char *name)
+{
+	LOGI("LED Stub: device name = %s", name);
+	return 0;
+}
+
 int led_device_open(const struct hw_module_t* module, const char* name,
         struct hw_device_t** device) 
 {
@@ -75,11 +81,15 @@ int led_device_open(const struct hw_module_t* module, const char* name,
 
 	dev->set_on = led_on;
 	dev->set_off = led_off;
+	dev->set_device_name = set_device_name;
 
 	*device = &dev->common;
 
-	/* open device file */
-	dev->fd = open("/dev/cdata-test", O_RDWR);
+	/* open device file: OMAP3 */
+	dev->fd = open("/sys/class/leds/led3/brightness", O_RDWR);	
+
+	/* open device file: HTC */
+	dev->fd = open("/sys/class/leds/flashlight/brightness", O_RDWR);
 
 success:
 	return 0;

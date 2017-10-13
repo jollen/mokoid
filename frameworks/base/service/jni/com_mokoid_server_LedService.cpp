@@ -11,8 +11,7 @@
 
 struct led_control_device_t *sLedDevice = NULL;
 
-static jboolean
-mokoid_init(JNIEnv *env, jclass clazz)
+static jboolean mokoid_init(JNIEnv *env, jclass clazz)
 {
     led_module_t* module;
 

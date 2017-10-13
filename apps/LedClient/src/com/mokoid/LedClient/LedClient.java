@@ -28,8 +28,7 @@ public class LedClient extends Activity {
 
         // Call an API on the library.
 	LedService ls = new LedService();
-	ls.setOff(1);
-	ls.setOff(2);
+	ls.setOn(0);
         
         TextView tv = new TextView(this);
         tv.setText("LED 1&2 should be off.");
