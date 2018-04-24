@@ -125,12 +125,7 @@ int main(int argc __unused, char** argv)
         sp<ProcessState> proc(ProcessState::self());
         sp<IServiceManager> sm = defaultServiceManager();
         ALOGI("ServiceManager: %p", sm.get());
-        AudioFlinger::instantiate();
         MediaPlayerService::instantiate();
-        CameraService::instantiate();
-        AudioPolicyService::instantiate();
-        SoundTriggerHwService::instantiate();
-        registerExtensions();
         ProcessState::self()->startThreadPool();
         IPCThreadState::self()->joinThreadPool();
     }

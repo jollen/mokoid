@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#include <binder/IPCThreadState.h>
+#include <binder/ProcessState.h>
+#include <binder/IServiceManager.h>
+
+#include <utils/Log.h>
+
+using namespace android;
+
+sp<MokoidSurface> surface;
+
+static void demo(int x, int y, int w, int h)
+{
+    char *buf;
+    int stride;
+
+    LOGI("MokoidSurface: we use sp<> template.");
+    surface = new MokoidSurface();
+
+    if (!surface->clientInit(x, y, w, h, &stride)) {
+	LOGI("failed to initialize a surface\n");
+	return;
+    } 
+
+    surface->lockScreen();
+    buf = surface->getBuffer();
+    draw(buf, w, h, stride);
+    surface->unlockScreen();
+}
+
+int main(int argc, char **argv)
+{
+    LOGI("MokoidSurface is started.");
+
+    ProcessState::self()->startThreadPool();
+
+    demo(10, 10, 160, 240);
+
+    IPCThreadState::self()->joinThreadPool();
+
+    return 0;
+}

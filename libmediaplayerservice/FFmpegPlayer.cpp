@@ -35,6 +35,8 @@ FFmpegPlayer::FFmpegPlayer() {
 
 FFmpegPlayer::~FFmpegPlayer() {
     ALOGV("~FFmpegPlayer");
+    delete this;
+    this = NULL; 
     reset();
 }
 

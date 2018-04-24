@@ -78,7 +78,7 @@ public class LedTest extends Activity implements View.OnClickListener,
          * which is provided by LedManager. 
          */
 
-	mLedManager.LedOn(1); 
+	   mLedManager.LedOn(1); 
 
 
         TextView tv = new TextView(this);
