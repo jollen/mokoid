@@ -60,9 +60,11 @@ int led_off(struct led_control_device_t *dev, int32_t led)
 	return 0;
 }
 
-int set_device_name(struct led_control_device_t *dev, char *name)
+int set_name(struct led_control_device_t *dev, const char *name)
 {
-	LOGI("LED Stub: device name = %s", name);
+	char *_name;
+	_name = const_cast<char *>(name); // read-only
+	LOGI("LED Stub: device name = %s", _name);
 	return 0;
 }
 
@@ -81,7 +83,7 @@ int led_device_open(const struct hw_module_t* module, const char* name,
 
 	dev->set_on = led_on;
 	dev->set_off = led_off;
-	dev->set_device_name = set_device_name;
+	dev->set_name = set_name;
 
 	*device = &dev->common;
 

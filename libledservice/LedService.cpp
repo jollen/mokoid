@@ -50,10 +50,20 @@ public:
     {
         Parcel data, reply;
         data.writeInterfaceToken(ILedService::getInterfaceDescriptor());
+        data.writeInt32(led);
         remote()->transact(BnLedService::LED_ON, data, &reply);
         return 0;
     }
 
+    virtual int setName(const char *name)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(ILedService::getInterfaceDescriptor());
+        // writeCString(const char* str);
+        data.writeCString(name);
+        remote()->transact(BnLedService::LED_SET_NAME, data, &reply);
+        return 0;
+    }
 };
 
 IMPLEMENT_META_INTERFACE(LedService, "mokoid.hardware.ILedService");
@@ -61,14 +71,24 @@ IMPLEMENT_META_INTERFACE(LedService, "mokoid.hardware.ILedService");
 status_t BnLedService::onTransact(
     uint32_t code, const Parcel& data, Parcel* reply, uint32_t flags)
 {
+    int led;
+
     switch(code) {
         case CONNECT: {
             CHECK_INTERFACE(ILedService, data, reply);
             return NO_ERROR;
         } break;
 	case LED_ON:
+        CHECK_INTERFACE(ILedService, data, reply);
+        led = data.readInt32();
+        setOn(led);
 	    return NO_ERROR;
-        default:
+    case LED_SET_NAME:
+        CHECK_INTERFACE(ILedService, data, reply);
+        name = data.readCString();
+        setName(name);
+        return NO_ERROR;
+    default:
             return BBinder::onTransact(code, data, reply, flags);
     }
 }
@@ -113,6 +133,20 @@ int LedService::setOn(int led)
         return -1;
     } else {
         return sLedDevice->set_on(sLedDevice, led);
+    }
+
+    return 0;
+}
+
+int LedService::setName(const char *name)
+{
+    LOGI("LedService JNI: mokoid_setName() is invoked.");
+
+    if (sLedDevice == NULL) {
+        LOGI("LedService JNI: sLedDevice was not fetched correctly.");
+        return -1;
+    } else {
+        return sLedDevice->set_name(sLedDevice, name);
     }
 
     return 0;

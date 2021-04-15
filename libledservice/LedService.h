@@ -9,7 +9,8 @@ class ILedService : public IInterface
 public:
    enum {
         CONNECT = IBinder::FIRST_CALL_TRANSACTION,
-        LED_ON 
+        LED_ON,
+        LED_SET_NAME
    };
 
 public:
@@ -21,7 +22,8 @@ public:
      */
     DECLARE_META_INTERFACE(LedService);
 
-    int setOn(int led);
+    virutal int setOn(int led) = 0;
+    virtual int setName(const char *name) = 0;
 };
 
 
@@ -39,6 +41,7 @@ class LedService : public BnLedService
 public:
     static void instantiate();
     virtual int setOn(int led);
+    virtual int setName(const char *name);
 
 private:
     LedService();

@@ -1,0 +1,6 @@
+package android.hardware.led@1.0;
+
+
+enum LedStatus : uint32_t {
+	LED_ON
+};
