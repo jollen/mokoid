@@ -88,7 +88,8 @@ public class LedManager
 
 	private void doLedChanged() {
 		 final int size = sLeds.size();
-		 for (int i=0 ; i<size ; i++) {
+
+		 for (int i = 0; i < size; i++) {
 			 LedDelegate led = sLeds.get(i);
 			 led.onLedChanged();
 		 }
@@ -118,7 +119,8 @@ public class LedManager
 		@Override
 		public void run() {
 	    		try {
-					mLedService.setOn(1);
+	    			// Android IPC
+					mLedService.setOn(1, 2);
 					
 					Message msg = new Message();
 					
@@ -142,6 +144,8 @@ public class LedManager
 		public void run() {
 	    		try {
 					mLedService.setAllOn();
+
+
 					
 					Message msg = new Message();
 					

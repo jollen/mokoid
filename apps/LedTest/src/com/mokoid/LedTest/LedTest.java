@@ -28,57 +28,71 @@ import android.content.Intent;
 import android.view.View;
 import android.os.Debug;
 
+public class LedInfo extends Context {
+    // ...
+}
+
 public class LedTest extends Activity implements View.OnClickListener,
 							LedEventListener {
     private LedManager mLedManager = null;
+    private int mDelegateID;
+
+    private int mNativeContext; // accessed (written) by native methods
+    private int mPeriodContext;
+
+    private native final void _native_setup(Object context_this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Debug.startMethodTracing("led");
+        _native_setup(new WeakReference<Context>(this));
 
         // Start LedService in a seperated process.
         startService(new Intent("com.mokoid.systemserver"));
 
-	// Just for testing. !! PLEASE DON't DO THIS !!
-	//LedService ls = new LedService();
+	    // Just for testing. !! PLEASE DON't DO THIS !!
+	    //LedService ls = new LedService();
 
         Button btn = new Button(this);
         btn.setText("Click to turn LED 1 On");
-	btn.setOnClickListener(this);
+	    btn.setOnClickListener(this);
 
         setContentView(btn);
 
+        Debug.startMethodTracing("led");
 
         // Singleton 實作
         // TODO: 使用 Java Singleton Template
         if (mLedManager == null) {
             mLedManager = new LedManager();
-            //mLedManager.AllOn();
+
+            // Fix: Async method call
+            mLedManager.AllOn();
         }     
 
-        //Debug.stopMethodTracing();
+        Debug.stopMethodTracing();
     }
 
     public void onClick(View v) {
 
         // Get LedManager.
         if (mLedManager == null) {
-	    Log.i("LedTest", "Creat a new LedManager object.");
-	    mLedManager = new LedManager();
-	    mLedManager.registerListener(this);
+	       Log.i("LedTest", "Creat a new LedManager object.");
+           // FIX: getSystemService()
+	       mLedManager = new LedManager();
+	       mLedManager.registerListener(this);
         }
 
         if (mLedManager != null) {
-	    Log.i("LedTest", "Got LedManager object.");
-	}
+	       Log.i("LedTest", "Got LedManager object.");
+	    }
 
         /** Call methods in LedService via proxy object 
          * which is provided by LedManager. 
          */
 
-	   mLedManager.LedOn(1); 
+	    mLedManager.LedOn(1); 
 
 
         TextView tv = new TextView(this);
@@ -92,5 +106,9 @@ public class LedTest extends Activity implements View.OnClickListener,
 
     public void onLedReady() {
         Log.i("LedTest", " in LedTest::onLedReady");
+    }
+
+    public final void notifyLedChanged() {
+
     }
 }

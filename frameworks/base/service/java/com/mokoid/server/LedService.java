@@ -46,9 +46,9 @@ public final class LedService extends ILedService.Stub {
     /*
      * Mokoid LED native methods.
      */
-    public boolean setOn(int led) {
+    public boolean setOn(int led, int delay) {
         Log.i("MokoidPlatform", "LED On");
-	   return _set_on(led);
+	   return _set_on(led, delay);
     }
 
     public boolean setOff(int led) {
@@ -57,7 +57,7 @@ public final class LedService extends ILedService.Stub {
     }
 
     public boolean setName(String name) {
-	return true;
+	   return true;
     }
 
     public boolean setAllOn() {
@@ -70,7 +70,7 @@ public final class LedService extends ILedService.Stub {
     }
 
     private static native boolean _init();
-    private static native boolean _set_on(int led);
+    private static native boolean _set_on(int led, int delay);
     private static native boolean _set_off(int led);
     private static native boolean _set_device_name(String name);
 }

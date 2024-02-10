@@ -23,7 +23,7 @@ package mokoid.hardware;
 */
 interface ILedService
 {
-    boolean setOn(int led);
+    boolean setOn(int led, int delay);
     boolean setOff(int led);
     boolean setAllOn();
     boolean setName(String name);

@@ -29,7 +29,8 @@ static jboolean mokoid_init(JNIEnv *env, jclass clazz)
     return -1;
 }
 
-static jboolean mokoid_setOn(JNIEnv* env, jobject thiz, jint led)
+// Java method: boolean _set_on(int led, int delay)
+static jboolean mokoid_setOn(JNIEnv* env, jobject thiz, jint led, jint delay)
 {
     ALOGI("LedService JNI: mokoid_setOn() is invoked.");
 
@@ -75,7 +76,7 @@ static jboolean mokoid_setName(JNIEnv* env, jobject thiz, jstring ns)
 static const JNINativeMethod gMethods[] = {
     {"_init",	  	"()Z",
 			(void*)mokoid_init},
-    { "_set_on",          "(I)Z",
+    { "_set_on",          "(II)Z",
                         (void*)mokoid_setOn },
     { "_set_off",          "(I)Z",
                         (void*)mokoid_setOff },
