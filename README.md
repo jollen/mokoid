@@ -170,3 +170,10 @@ int LedService::setOff(int led)
 
 ### Step 10: 實作 Binder Transaction
 
+# Android 11+ Development
+
+## Generating Android.bp
+
+```
+androidmk Android.mk > Android.bp
+```
