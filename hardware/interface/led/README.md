@@ -18,6 +18,8 @@ NOTICE: ```As of Android 10, HIDL is deprecated and Android is migrating to use 
 As of Android 10+, use the ```hidl2aidl``` tool to convert an existing HAL from HIDL to AIDL:
 
 ```
-hidl2aidl -o <output directory> -l <file with license> <package>, see: [AIDL for HALs](https://source.android.com/docs/core/architecture/aidl/aidl-hals#converting-to-aidl)
+hidl2aidl -o <output directory> -l <file with license> <package>, 
 ```
+
+See: [AIDL for HALs](https://source.android.com/docs/core/architecture/aidl/aidl-hals#converting-to-aidl)
 
